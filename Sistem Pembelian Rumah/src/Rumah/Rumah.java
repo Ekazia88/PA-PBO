@@ -1,8 +1,11 @@
 package Rumah;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.ArrayList;
 public class Rumah{
     private int idRumah;
     private int NomorRumah;
@@ -49,9 +52,11 @@ public class Rumah{
     public void SaveFileRumah(int idRumah,int NomorRumah,String Alamat,String StatusRumah, String tipeRumah) {
         try {
             FileWriter writer = new FileWriter("data/Rumah.txt", true);
-            writer.write( idRumah +"," + NomorRumah + ","+ Alamat + ","+StatusRumah +","+ tipeRumah + "\n");
+            BufferedWriter bw = new BufferedWriter(writer);
+            bw.write(idRumah +"," + NomorRumah + ","+ Alamat + ","+StatusRumah +","+ tipeRumah + "\n");
+            bw.close();
             writer.close();
-            System.out.println("Successfully registered to file.");
+            System.out.println("Data Save Sukses");
         } catch (IOException e) {
             System.out.println("An error occurred while registering to file.");
             e.printStackTrace();

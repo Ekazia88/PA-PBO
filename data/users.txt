@@ -1,3 +1,2 @@
-AccCustomer,asda,ada123
-AccCustomer,ada,asdsad
-AccCustomer,sadasd,sadsa
+accAdmin,Admin,admin123
+
