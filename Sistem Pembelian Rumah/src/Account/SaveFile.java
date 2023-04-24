@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.jar.Attributes.Name;
 
 public class SaveFile {
     private static final String Dir = "data/users/";

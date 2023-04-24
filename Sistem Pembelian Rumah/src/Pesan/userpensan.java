@@ -1,6 +1,5 @@
 package Pesan;
 
-import java.beans.Customizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -13,13 +12,10 @@ import java.util.ArrayList;
 import Account.*;
 
 import Rumah.*;
-//TODO BUAT Mekanisme Pesan
 public class userpensan implements interfacePesan{
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader br = new BufferedReader(isr);
     private ArrayList<Pesan> psnlist;
-    SaveFile sv = new SaveFile();
-    crud cr = new crud();
     public userpensan(){
         this.psnlist = new ArrayList<>();
         loadfile();
@@ -33,6 +29,8 @@ public class userpensan implements interfacePesan{
     }
     @Override
     public void lihatseluruhpesan() throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("List Pesan");
         for(Pesan pslist : psnlist){
             Integer Idpesan = pslist.getIdpesan();
@@ -51,6 +49,8 @@ public class userpensan implements interfacePesan{
     }
     @Override
     public void ubahpesan() throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("Ubah Data ");
         if(psnlist.size() == 0){
             System.out.println("Pesanan Kosong");
@@ -86,11 +86,13 @@ public class userpensan implements interfacePesan{
     }
     @Override
     public void lihatpesancustomer(int idcus,String username) throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("Liat Pesan");
-        Akun customer = sv.getUser(username);
+        Akun customer = SaveFile.getUser(username);
             for(Pesan pslist : psnlist){
                 if(pslist.getIdcus() == ((AccCustomer) customer).getIdcustomer()){
-                Rumah rmh = cr.getRumah(pslist.getIdRumah());
+                Rumah rmh = crud.getRumah(pslist.getIdRumah());
                 System.out.println("--------------");
                 System.out.println("1. id pesan : " + pslist.getIdpesan());
                 System.out.println("2. Nama Pemesan : " + ((AccCustomer) customer).getNama());
@@ -105,7 +107,9 @@ public class userpensan implements interfacePesan{
         } 
     }
     @Override
-    public void hpspesan(int idcus) throws IOException {
+    public void hpspesanuser(int idcus) throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("hapus Pesan");
         if(psnlist.size() == 0){
             System.out.println("Tidak ada Pesanan");
@@ -150,7 +154,9 @@ public class userpensan implements interfacePesan{
     }
     //todo lihat data diri
     public void lihatdatadiri(String Username) throws IOException {
-        Akun customer = sv.getUser(Username);
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        Akun customer = SaveFile.getUser(Username);
         System.out.println("Data Diri");
         System.out.println("Nama Asli : "+((AccCustomer) customer).getNama());
         System.out.println("Username : "+((AccCustomer) customer).getUsername());
@@ -159,6 +165,74 @@ public class userpensan implements interfacePesan{
         System.out.println("Alamat : "+((AccCustomer) customer).getAlamat());
         System.out.println("Jenis Kelamin : "+((AccCustomer) customer).getJenisKelamin());
         System.out.println("-------------");
+    }
+    public void konfirmasipesan() throws IOException{
+        lihatseluruhpesan();
+        System.out.println("Cari id : ");
+        int idpesan = Integer.parseInt(br.readLine());
+        getList();
+        for(int i = 0; i < psnlist.size();i++ ){
+            Pesan pslist = psnlist.get(i);
+            if(idpesan == pslist.getIdpesan() ){
+                int idcus = pslist.getIdcus();
+                int idRumah = pslist.getIdRumah();
+                System.out.println("Status Pesanan : "+ pslist.getStatuspsn());
+                System.out.print("Ubah  status Pesanan ? [ya/tidak]: ");
+                String pilih = br.readLine();
+                String konfirmasipesan = pslist.getStatuspsn();
+                if(pilih.equals("ya")){
+                    System.out.print("Konfirmasi Pesan[gagal/berhasil/pending] : ");
+                    konfirmasipesan = br.readLine();
+                }else if(pilih.equals("tidak")){
+                    konfirmasipesan = pslist.getStatuspsn();
+                }else{
+                    System.out.println("pilihan harus ya/tidak ");
+                }
+                System.out.println("Status Pembayaran : "+ pslist.getStatusPbyrn());
+                System.out.print("ubah Status Pembayaran [lunas/cicil] : ");
+                String statusPbyrn = br.readLine();
+                String tglpesan = pslist.getTglPesan();
+                pslist = new Pesan(idpesan, idRumah, idcus, konfirmasipesan, statusPbyrn,tglpesan);
+            }
+            try {
+                FileWriter wr = new FileWriter("data/pesan.txt",false);
+                BufferedWriter bw = new BufferedWriter(wr);
+                for(Pesan psn : psnlist){
+                    bw.write(psn.getIdpesan() +"," + psn.getIdRumah() + ","+ psn.getIdcus() + ","+ psn.getStatuspsn() +","+ psn.getStatusPbyrn() + "\n");
+                    bw.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to save in file!!");
+                System.out.println(e.getMessage());
+            }
+        }
+
+    }
+    public void hpspesanadmin() throws IOException {
+        lihatseluruhpesan();
+        System.out.println("hapus Pesan admin");
+        if(psnlist.size() == 0){
+            System.out.println("Tidak ada Pesanan");
+        }else{
+            System.out.println("Cari id Pesan : ");
+            int idpsn = Integer.parseInt(br.readLine());
+                for(int i = 0; i < psnlist.size(); i++){
+                    Pesan psn = psnlist.get(i);
+                    if(psn.getIdcus() == idpsn){
+                        psnlist.remove(i);
+                    }
+                }
+                try{
+                    FileWriter writer = new FileWriter("data/pesan.txt", false);
+                    BufferedWriter bw = new BufferedWriter(writer);
+                    for(Pesan psn  : psnlist ){
+                        bw.write(psn.getIdpesan() +"," + psn.getIdRumah() + ","+ psn.getIdcus() + ","+ psn.getStatuspsn() +","+ psn.getStatusPbyrn() + "\n");
+                        bw.close();
+                    }
+                }catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+        }
     }
     public void loadfile(){
         try{

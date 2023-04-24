@@ -1,5 +1,1 @@
-AccCustomer,asdfsa,abc2020
-AccCustomer,safas,abc22
-AccCustomer,asda,asda123
-AccCustomer,asd2,asda
-AccCustomer,dsfds,sdf
+accAdmin,Admin,admin123

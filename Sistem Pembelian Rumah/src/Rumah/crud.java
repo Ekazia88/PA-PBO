@@ -28,6 +28,8 @@ public class crud implements InterfaceRumah {
     }
     @Override
     public void create() throws IOException{
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("Tambahkan Data");
         int idRumah = rumahs.size() + 1;
         System.out.print("Masukkan Nomor rumah : ");
@@ -43,6 +45,8 @@ public class crud implements InterfaceRumah {
     }
     @Override
     public void update() throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("Ubah Data");
         if(rumahs.size() == 0){
             System.out.println("data Kosong");
@@ -79,8 +83,10 @@ public class crud implements InterfaceRumah {
     }
     @Override
     public void delete() throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("hapus data");
-        if(this.rumahs.size() == 0){
+        if(rumahs.size() == 0){
             System.out.println("data Kosong");
         }else{
             System.out.print("Cari Nomor Rumah : ");
@@ -127,6 +133,8 @@ public class crud implements InterfaceRumah {
     }
     @Override
     public void lihat() throws IOException {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("List items:");
         for (Rumah rmhs : rumahs) {
             int idrumah = rmhs.getIdRumah();

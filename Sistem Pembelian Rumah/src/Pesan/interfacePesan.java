@@ -10,6 +10,8 @@ public interface interfacePesan {
     public void ubahpesan() throws IOException;
     public void lihatseluruhpesan() throws IOException;
     public void lihatpesancustomer(int idcus,String username) throws IOException;
-    public void hpspesan(int idcus) throws IOException;
+    public void hpspesanuser(int idcus) throws IOException;
     public void lihatdatadiri(String Username) throws IOException;
+    public void konfirmasipesan()throws IOException;
+    public void hpspesanadmin() throws IOException;
 }
