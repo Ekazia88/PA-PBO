@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.jar.Attributes.Name;
 
 public class SaveFile {
     private static final String Dir = "data/users/";
@@ -18,18 +19,19 @@ public class SaveFile {
         admins = new ArrayList<>();
         customers = new ArrayList<>();
     }
-
+    
     public void registerAdmin(String username, String password) {
         accAdmin admin = new accAdmin("Admin", "admin123");
-        admin.register(username, password);
+        admin.registerusers(username, password);
         admins.add(admin);
     }
 
     public void registerCustomer(String username, String password,int idcustomer,int umur, String nama,String Jk,String Alamat,String email) {
         AccCustomer customer = new AccCustomer(username, password,idcustomer,umur,nama,Jk,Alamat,email);
-        customer.register(username, password);
-        customers.add(customer);
+        customer.register(username, password,idcustomer,umur,nama,Jk,Alamat,email);
+        customer.registerusers(username, password);
     }
+    //todo RegisterERROR
 
     public boolean loginAdmin(String username, String password) {
         for (accAdmin admin : admins) {
@@ -52,9 +54,7 @@ public class SaveFile {
     public static void saveCustomersToFile(AccCustomer customer) {
         try {
             FileWriter writer = new FileWriter(Dir+ customer.getUsername() +".txt");
-            for (AccCustomer cstr : customers) {
-                writer.write(cstr.getUsername()+".\n"+ cstr.getPassword() + ".\n" + cstr.getNama()+".\n"+ cstr.getIdcustomer()+".\n"+cstr.getUmur() + ".\n" +cstr.getAlamat()+".\n"+cstr.getEmail());
-            }
+            writer.write(customer.getUsername()+"\n"+ customer.getPassword() + "\n" + customer.getNama()+"\n"+ customer.getIdcustomer()+"\n"+customer.getUmur() + "\n" +customer.getAlamat()+"\n"+customer.getJenisKelamin()+"\n"+customer.getEmail()+"\n");
             writer.close();
             System.out.println("Successfully saved File.");
         } catch (IOException e) {
@@ -82,13 +82,14 @@ public static Akun getUser(String username) {
             FileReader reader2 = new FileReader(filename2);
             BufferedReader bufferedReader2 = new BufferedReader(reader2);
             String Username = bufferedReader2.readLine();
-            String email = bufferedReader2.readLine();
+            String passwordc = bufferedReader2.readLine();
+            String nama = bufferedReader2.readLine();
             int idcustomer = Integer.parseInt(bufferedReader2.readLine());
             int umur = Integer.parseInt(bufferedReader2.readLine());
-            String nama = bufferedReader2.readLine();
-            String Jk = bufferedReader2.readLine();
             String Alamat = bufferedReader2.readLine();
-            user = new AccCustomer(Username, password,idcustomer,umur,nama,Jk,Alamat,email);
+            String Jk = bufferedReader2.readLine();
+            String email = bufferedReader2.readLine();
+            user = new AccCustomer(Username, passwordc,idcustomer,umur,nama,Jk,Alamat,email);
             bufferedReader2.close();
             customers.add((AccCustomer) user);
         }

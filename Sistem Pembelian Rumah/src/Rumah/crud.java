@@ -13,7 +13,7 @@ import java.io.IOException;
 public class crud implements InterfaceRumah {
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader br = new BufferedReader(isr);
-    private ArrayList<Rumah> rumahs;
+    private static ArrayList<Rumah> rumahs;
     
     public crud(){
         this.rumahs = new ArrayList<>();
@@ -52,7 +52,6 @@ public class crud implements InterfaceRumah {
             for(int i = 0; i < rumahs.size(); i++){
                 Rumah rmhs = rumahs.get(i);
                 if(rmhs.getNomorRumah() == cari ){
-                    System.out.println(rmhs.getNomorRumah());
                     int idrumah = rmhs.getIdRumah();
                     System.out.print("Masukkan Nomor rumah : ");
                     int Norumah = Integer.parseInt(br.readLine());
@@ -143,5 +142,37 @@ public class crud implements InterfaceRumah {
             System.out.println("Tipe : "+TipeRumah );
             System.out.println("-----");
         }
+    }
+    public static Rumah getRumah(int cari){
+        try{
+            String filename = "data/users.txt";
+            FileReader reader = new FileReader(filename);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String line = bufferedReader.readLine();
+            int nomorRumah;
+            int idRumah;
+            String Alamat;
+            String StatusRumah;
+            String TipeRumah;
+            String[] tokens = line.split(",");   
+            nomorRumah = Integer.parseInt(tokens[1]);
+            idRumah = Integer.parseInt(tokens[0]);
+            Alamat = tokens[2];
+            StatusRumah = tokens[3];
+            TipeRumah = tokens[4];
+            Rumah getrmh = null;
+            if(nomorRumah == cari){
+                getrmh = new Rumah(idRumah, nomorRumah, Alamat, StatusRumah, TipeRumah);
+                rumahs.add((Rumah) getrmh);
+            }else{
+                System.out.println("Nomor Rumah tidak ada!!");
+            }
+            bufferedReader.close();
+            return getrmh;
+        }catch(IOException e){
+            System.out.println("And Error occurred while reading file!!!");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

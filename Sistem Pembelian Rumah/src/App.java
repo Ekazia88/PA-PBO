@@ -1,7 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketImpl;
+
 import Account.*;
+import Pesan.userpensan;
 import Rumah.*;
 public class App {
 
@@ -9,6 +12,8 @@ public class App {
     static BufferedReader br = new BufferedReader(isr);
     static SaveFile save = new SaveFile();
     static crud crud = new crud();
+    static userpensan psn = new userpensan();
+    //todo tambahkan pesanan
     public static void showpageAdmin() throws IOException{
         while (true){
             System.out.println("Selamat Datang Di Admin");
@@ -36,6 +41,36 @@ public class App {
             }
         }
     }
+    public static void showpageuser(String usrnm) throws IOException{
+        Akun customer = SaveFile.getUser(usrnm);
+        if(customer instanceof AccCustomer){
+            int idcus = ((AccCustomer) customer).getIdcustomer();
+            System.out.println("Selamat Datang "+ usrnm);
+            System.out.println("1. Lihat data Rumah");
+            System.out.println("2. pesan Rumah");
+            System.out.println("3. Lihat Pesan");
+            System.out.println("4. Lihat Data Diri");
+            System.out.println("5. Exit");
+            int menu = Integer.parseInt(br.readLine());
+            switch(menu){
+                case 1:
+                    crud.lihat();
+                    break;
+                case 2:
+                    System.out.println("Nomor Rumah Yang ingin dipesan : ");
+                    int cari = Integer.parseInt(br.readLine());
+                    psn.tambahpesan(usrnm, idcus,cari);
+                    break;
+                case 3:
+                    psn.lihatpesancustomer(idcus, usrnm);
+                    break;
+                case 4:
+
+            }
+        }else{
+            System.out.println("Anda Harus Login Dulu");
+        }
+    }
     public static void login() throws IOException{
         System.out.print("Masukkan username : ");
         String username = br.readLine();
@@ -43,7 +78,7 @@ public class App {
         String Password = br.readLine();
         SaveFile.getUser(username);
         if(username.equals("Admin") && Password.equals("admin123")){
-            save.loginAdmin("Admin", "admin123");
+            save.loginAdmin(username, Password);
             if (save.loginAdmin(username, Password) == true) {
                 System.out.println("Login successful!");
                 showpageAdmin();
@@ -54,7 +89,7 @@ public class App {
             save.loginCustomer(username, Password);
             if (save.loginCustomer(username, Password) == true) {
                 System.out.println("Login successful!");
-                
+                showpageuser(username);
             } else {
                 System.out.println("Password Dan Username Salah");
             }
@@ -76,7 +111,6 @@ public class App {
         String JenisKelamin = br.readLine();
         System.out.print("Masukkan Alamat : ");
         String Alamat = br.readLine();
-        
         save.registerCustomer(username, Password, id, umur, Nama, JenisKelamin, Alamat, Email);
     }
     
