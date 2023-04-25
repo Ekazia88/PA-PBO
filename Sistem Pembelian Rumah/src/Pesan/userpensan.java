@@ -15,7 +15,9 @@ import Rumah.*;
 public class userpensan implements interfacePesan{
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader br = new BufferedReader(isr);
-    private ArrayList<Pesan> psnlist;
+    private static crud cr = new crud();
+    private static ArrayList<Pesan> psnlist;
+    static ArrayList<AccCustomer> cstr = SaveFile.getCustomers();
     public userpensan(){
         this.psnlist = new ArrayList<>();
         loadfile();
@@ -84,27 +86,35 @@ public class userpensan implements interfacePesan{
             }
         }
     }
+    public Pesan getpsn(int idcus){
+        psnlist = getList();
+        for(Pesan psnl : psnlist){
+            if(psnl.getIdRumah() == idcus){
+                return psnl;
+            }
+        }
+        return null;
+    }
     @Override
-    public void lihatpesancustomer(int idcus,String username) throws IOException {
+    //todo baikin lihatpesan customer 
+    public void lihatpesancustomer(int idcus,String username,ArrayList<AccCustomer> cstr,int index) throws IOException {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.out.println("Liat Pesan");
-        Akun customer = SaveFile.getUser(username);
-            for(Pesan pslist : psnlist){
-                if(pslist.getIdcus() == ((AccCustomer) customer).getIdcustomer()){
-                Rumah rmh = crud.getRumah(pslist.getIdRumah());
-                System.out.println("--------------");
-                System.out.println("1. id pesan : " + pslist.getIdpesan());
-                System.out.println("2. Nama Pemesan : " + ((AccCustomer) customer).getNama());
-                System.out.println("3. Alamat : "+rmh.getAlamat());
-                System.out.println("4. Tgl pesan : "+ pslist.getTglPesan() );
-                System.out.println("5. Tipe Rumah : "+rmh.getTipeRumah());
-                System.out.println("6. Status Rumah : "+rmh.getTipeRumah());
-                System.out.println("7. Status Pembayaran : "+pslist.getStatusPbyrn());
-                System.out.println("8. Status Pesan : "+pslist.getStatuspsn());
-                System.out.println("-----------------");
-                }
-        } 
+        AccCustomer customer = cstr.get(index);
+        Pesan listpns = getpsn(idcus);
+        int id = listpns.getIdRumah();
+        Rumah rmh = cr.getrmh(id);
+        System.out.println("--------------");
+        System.out.println("1. id pesan : " +listpns.getIdpesan());
+        System.out.println("2. Nama Pemesan : " + customer.getNama());
+        System.out.println("3. Alamat : "+customer.getAlamat());
+        System.out.println("4. Tgl pesan : "+ listpns.getTglPesan() );
+        System.out.println("5. Tipe Rumah : "+ rmh.getTipeRumah());
+        System.out.println("6. Status Rumah : "+rmh.getStatusRumah());
+        System.out.println("7. Status Pembayaran : "+listpns.getStatusPbyrn());
+        System.out.println("8. Status Pesan : "+listpns.getStatuspsn());
+        System.out.println("-----------------");
     }
     @Override
     public void hpspesanuser(int idcus) throws IOException {
@@ -142,28 +152,32 @@ public class userpensan implements interfacePesan{
     }
     @Override
     public void tambahpesan(String username,int idcus,int cari){
-       SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-       int idpesan = psnlist.size() + 1;
-       int idRumah = crud.getRumah(cari).getIdRumah(); 
-       String StatusPesanan = "KonfirmasiPesan";
-       String Pembayaran = "Belum Bayar";
-       Date date = new Date();
-       String Tglpesan = format.format(date); 
-       Pesan psn = new Pesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
-       psn.SaveFilepesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
+        
+        if(crud.getRumah(cari) == null ){
+            System.out.println("Nomor rumah yg kamu cari ngak ada");
+        }else{
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            int idpesan = psnlist.size() + 1;
+            int idRumah = cari;
+            String StatusPesanan = "KonfirmasiPesan";
+            String Pembayaran = "Belum Bayar";
+            Date date = new Date();
+            String Tglpesan = format.format(date); 
+            Pesan psn = new Pesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
+            psn.SaveFilepesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
+        }
     }
-    //todo lihat data diri
-    public void lihatdatadiri(String Username) throws IOException {
+    public void lihatdatadiri(String Username,ArrayList<AccCustomer> cstr,int index) throws IOException {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        Akun customer = SaveFile.getUser(Username);
+        AccCustomer customer = cstr.get(index);
         System.out.println("Data Diri");
-        System.out.println("Nama Asli : "+((AccCustomer) customer).getNama());
-        System.out.println("Username : "+((AccCustomer) customer).getUsername());
-        System.out.println("Password : "+((AccCustomer) customer).getPassword());
-        System.out.println("Umur : "+((AccCustomer) customer).getUmur());
-        System.out.println("Alamat : "+((AccCustomer) customer).getAlamat());
-        System.out.println("Jenis Kelamin : "+((AccCustomer) customer).getJenisKelamin());
+        System.out.println("Nama  : "+ customer.getNama());
+        System.out.println("Username : "+ customer.getUsername());
+        System.out.println("Password : "+ customer.getPassword());
+        System.out.println("Umur : "+customer.getUmur());
+        System.out.println("Alamat : "+ customer.getAlamat());
+        System.out.println("Jenis Kelamin : "+customer.getJenisKelamin());
         System.out.println("-------------");
     }
     public void konfirmasipesan() throws IOException{
@@ -256,5 +270,5 @@ public class userpensan implements interfacePesan{
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
+    }   
 }

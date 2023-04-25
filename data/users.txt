@@ -1,1 +1,3 @@
 accAdmin,Admin,admin123
+AccCustomer,Abdullah,abd123
+AccCustomer,abd12,abd24

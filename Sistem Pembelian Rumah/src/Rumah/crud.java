@@ -2,11 +2,10 @@ package Rumah;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.Console;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import java.io.IOException;
@@ -153,33 +152,41 @@ public class crud implements InterfaceRumah {
     }
     public static Rumah getRumah(int cari){
         try{
-            String filename = "data/users.txt";
+            String filename = "data/rumah.txt";
             FileReader reader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(reader);
-            String line = bufferedReader.readLine();
-            int nomorRumah;
-            int idRumah;
-            String Alamat;
-            String StatusRumah;
-            String TipeRumah;
-            String[] tokens = line.split(",");   
-            nomorRumah = Integer.parseInt(tokens[1]);
-            idRumah = Integer.parseInt(tokens[0]);
-            Alamat = tokens[2];
-            StatusRumah = tokens[3];
-            TipeRumah = tokens[4];
-            Rumah getrmh = null;
-            if(nomorRumah == cari){
-                getrmh = new Rumah(idRumah, nomorRumah, Alamat, StatusRumah, TipeRumah);
-                rumahs.add((Rumah) getrmh);
-            }else{
-                System.out.println("Nomor Rumah tidak ada!!");
+            String line;
+            Rumah rhm = null;
+            while((line = bufferedReader.readLine())!= null){
+                String[] tokens= line.split(",");
+                int idRumah = Integer.parseInt(tokens[0]);
+                int NomorRumah = Integer.parseInt(tokens[1]);
+                String Alamat = tokens[2];
+                String StatusRumah = tokens[3];
+                String tipeRumah = tokens[4];
+                if(NomorRumah == cari){
+                    rhm = new Rumah(idRumah, NomorRumah, Alamat, StatusRumah, tipeRumah);
+                    rumahs.add(rhm);
+                    break;
+                }
             }
             bufferedReader.close();
-            return getrmh;
-        }catch(IOException e){
-            System.out.println("And Error occurred while reading file!!!");
+            return rhm;
+        } catch (FileNotFoundException e) {
+            System.out.println("file rumah not found: ");
+            return null;
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading file");
             e.printStackTrace();
+            return null;
+        }
+    }
+    public Rumah getrmh(int idrmh){
+        rumahs = getList();
+        for(Rumah rhm : rumahs){
+            if(rhm.getIdRumah() == idrmh){
+                return rhm;
+            }
         }
         return null;
     }

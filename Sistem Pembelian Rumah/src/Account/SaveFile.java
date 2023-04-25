@@ -18,7 +18,18 @@ public class SaveFile {
         admins = new ArrayList<>();
         customers = new ArrayList<>();
     }
-    
+    public static ArrayList<AccCustomer> getCustomers() {
+        return customers;
+    }
+    public static ArrayList<accAdmin> getAdmins() {
+        return admins;
+    }
+    public static void setAdmins(ArrayList<accAdmin> admins) {
+        SaveFile.admins = admins;
+    }
+    public static void setCustomers(ArrayList<AccCustomer> customers) {
+        SaveFile.customers = customers;
+    }
     public void registerAdmin(String username, String password) {
         accAdmin admin = new accAdmin("Admin", "admin123");
         admin.registerusers(username, password);
@@ -30,25 +41,24 @@ public class SaveFile {
         customer.register(username, password,idcustomer,umur,nama,Jk,Alamat,email);
         customer.registerusers(username, password);
     }
-    //todo RegisterERROR
-
     public boolean loginAdmin(String username, String password) {
         for (accAdmin admin : admins) {
-            if (admin.getUsername().equals(username)) {
+            if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean loginCustomer(String username, String password) {
-        for (AccCustomer customer : customers) {
-            if (customer.login(username, password)) {
+    public static boolean loginCustomer(String username, String password) {
+        for (AccCustomer cstr : customers) {
+            if (cstr.getUsername().equals(username) && cstr.getPassword().equals(password)) {
                 return true;
             }
         }
+        
         return false;
-    }
+        }
 
     public static void saveCustomersToFile(AccCustomer customer) {
         try {
@@ -66,34 +76,40 @@ public static Akun getUser(String username) {
         String filename = "data/users.txt";
         FileReader reader = new FileReader(filename);
         BufferedReader bufferedReader = new BufferedReader(reader);
-        String line = bufferedReader.readLine();
+        String line;
+        String usernames;
         String userType;
         String password;
-        String[] tokens = line.split(",");   
-        userType = tokens[0];
-        password = tokens[2];
-        Akun user = null;
-        if (userType.equals("accAdmin")) {
-            user = new accAdmin(username, password);
-            admins.add((accAdmin) user);
-        } else if (userType.equals("AccCustomer")) {
-            String filename2 = Dir + username + ".txt";
-            FileReader reader2 = new FileReader(filename2);
-            BufferedReader bufferedReader2 = new BufferedReader(reader2);
-            String Username = bufferedReader2.readLine();
-            String passwordc = bufferedReader2.readLine();
-            String nama = bufferedReader2.readLine();
-            int idcustomer = Integer.parseInt(bufferedReader2.readLine());
-            int umur = Integer.parseInt(bufferedReader2.readLine());
-            String Alamat = bufferedReader2.readLine();
-            String Jk = bufferedReader2.readLine();
-            String email = bufferedReader2.readLine();
-            user = new AccCustomer(Username, passwordc,idcustomer,umur,nama,Jk,Alamat,email);
-            bufferedReader2.close();
-            customers.add((AccCustomer) user);
+        Akun ak = null;
+        while((line = bufferedReader.readLine())!= null){
+            String[] tokens = line.split(",");
+            userType = tokens[0];
+            usernames = tokens[1]; 
+            password = tokens[2];   
+            accAdmin admin = null;
+            AccCustomer cstr = null;
+            if (userType.equals("accAdmin")&& usernames.equals(username)) { 
+                admin = new accAdmin(username, password);
+                admins.add(admin);
+            } else if (userType.equals("AccCustomer") && usernames.equals(username)) {
+                String filename2 = Dir+username+".txt";
+                FileReader reader2 = new FileReader(filename2);
+                BufferedReader bufferedReader2 = new BufferedReader(reader2);
+                String Username = bufferedReader2.readLine();
+                String passwordc = bufferedReader2.readLine();
+                String nama = bufferedReader2.readLine();
+                int idcustomer = Integer.parseInt(bufferedReader2.readLine());
+                int umur = Integer.parseInt(bufferedReader2.readLine());
+                String Alamat = bufferedReader2.readLine();
+                String Jk = bufferedReader2.readLine();
+                String email = bufferedReader2.readLine();
+                cstr = new AccCustomer(username, password,idcustomer,umur,nama,Jk,Alamat,email);
+                customers.add(cstr);
+                bufferedReader2.close();
+            }
         }
         bufferedReader.close();
-        return user;
+        return ak;
     } catch (FileNotFoundException e) {
         System.out.println("User file not found: " + username);
         return null;
