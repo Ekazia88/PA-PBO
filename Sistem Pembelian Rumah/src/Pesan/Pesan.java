@@ -6,7 +6,7 @@ import java.io.IOException;
 
 //TODO buat class pesan
 public class Pesan  {
-    private Integer Idpesan;
+    private final Integer Idpesan;
     private Integer IdRumah;
     private Integer Idcus;
     private String Statuspsn;
@@ -38,9 +38,6 @@ public class Pesan  {
     }
     public String getTglPesan() {
         return TglPesan;
-    }
-    public void setIdpesan(Integer idpesan) {
-        Idpesan = idpesan;
     }
     public void setIdRumah(Integer idRumah) {
         IdRumah = idRumah;

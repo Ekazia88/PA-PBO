@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 public class Rumah{
-    private int idRumah;
+    private final int idRumah;
     private int NomorRumah;
     private String Alamat;
     private String StatusRumah;
@@ -33,9 +33,6 @@ public class Rumah{
     }
     public void setAlamat(String alamat) {
         Alamat = alamat;
-    }
-    public void setIdRumah(int idRumah) {
-        this.idRumah = idRumah;
     }
     public void setNomorRumah(int nomorRumah) {
         NomorRumah = nomorRumah;

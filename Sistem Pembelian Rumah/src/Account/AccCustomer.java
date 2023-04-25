@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class AccCustomer extends Akun {
-    private int idcustomer;
+    private final int idcustomer;
     private int Umur;
     private String Nama;
     private String JenisKelamin;
@@ -36,9 +36,6 @@ public class AccCustomer extends Akun {
     }
     public String getEmail() {
         return Email;
-    }
-    public void setIdcustomer(int idcustomer) {
-        this.idcustomer = idcustomer;
     }
     public void setAlamat(String alamat) {
         Alamat = alamat;
