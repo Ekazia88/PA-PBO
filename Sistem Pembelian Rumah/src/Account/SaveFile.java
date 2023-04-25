@@ -11,12 +11,21 @@ public class SaveFile {
     private static final String Dir = "data/users/";
     private static ArrayList<accAdmin> admins;
     private static ArrayList<AccCustomer> customers;
-    public static int count() {
-        return customers.size();
+    public static int count(){
+        int lines = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/users.txt"))) {
+            while (reader.readLine() != null) lines++;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
     }
     public SaveFile() {
         admins = new ArrayList<>();
         customers = new ArrayList<>();
+    }
+    public void nullcstr(){
+        customers.clear();
     }
     public static ArrayList<AccCustomer> getCustomers() {
         return customers;
@@ -40,6 +49,7 @@ public class SaveFile {
         AccCustomer customer = new AccCustomer(username, password,idcustomer,umur,nama,Jk,Alamat,email);
         customer.register(username, password,idcustomer,umur,nama,Jk,Alamat,email);
         customer.registerusers(username, password);
+        customers.add(customer);;
     }
     public boolean loginAdmin(String username, String password) {
         for (accAdmin admin : admins) {
@@ -103,7 +113,7 @@ public static Akun getUser(String username) {
                 String Alamat = bufferedReader2.readLine();
                 String Jk = bufferedReader2.readLine();
                 String email = bufferedReader2.readLine();
-                cstr = new AccCustomer(username, password,idcustomer,umur,nama,Jk,Alamat,email);
+                cstr = new AccCustomer(Username, passwordc,idcustomer,umur,nama,Jk,Alamat,email);
                 customers.add(cstr);
                 bufferedReader2.close();
             }

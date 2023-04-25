@@ -9,12 +9,14 @@ public class Rumah{
     private String Alamat;
     private String StatusRumah;
     private String tipeRumah; 
-    public Rumah(int idRumah,int NomorRumah,String Alamat,String StatusRumah, String tipeRumah){
+    private Boolean dipesan = false;
+    public Rumah(int idRumah,int NomorRumah,String Alamat,String StatusRumah, String tipeRumah,Boolean dipesan){
         this.idRumah = idRumah;
         this.NomorRumah = NomorRumah;
         this.Alamat = Alamat;
         this.StatusRumah = StatusRumah;
         this.tipeRumah = tipeRumah;
+        this.dipesan = dipesan;
     }
     public String getAlamat() {
         return Alamat;
@@ -31,6 +33,9 @@ public class Rumah{
     public String getTipeRumah() {
         return tipeRumah;
     }
+    public Boolean getDipesan() {
+        return dipesan;
+    }
     public void setAlamat(String alamat) {
         Alamat = alamat;
     }
@@ -43,11 +48,14 @@ public class Rumah{
     public void setTipeRumah(String tipeRumah) {
         this.tipeRumah = tipeRumah;
     }
-    public void SaveFileRumah(int idRumah,int NomorRumah,String Alamat,String StatusRumah, String tipeRumah) {
+    public void setDipesan(Boolean dipesan) {
+        this.dipesan = dipesan;
+    }
+    public void SaveFileRumah(int idRumah,int NomorRumah,String Alamat,String StatusRumah, String tipeRumah, Boolean dipesan) {
         try {
             FileWriter writer = new FileWriter("data/Rumah.txt", true);
             BufferedWriter bw = new BufferedWriter(writer);
-            bw.write(idRumah +"," + NomorRumah + ","+ Alamat + ","+StatusRumah +","+ tipeRumah + "\n");
+            bw.write(idRumah +"," + NomorRumah + ","+ Alamat + ","+StatusRumah +","+ tipeRumah + ","+dipesan+"\n");
             bw.close();
             writer.close();
             System.out.println("Data Save Sukses");

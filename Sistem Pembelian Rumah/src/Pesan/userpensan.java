@@ -7,6 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
+
+import javax.sound.midi.Soundbank;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import Account.*;
@@ -19,7 +22,7 @@ public class userpensan implements interfacePesan{
     private static ArrayList<Pesan> psnlist;
     static ArrayList<AccCustomer> cstr = SaveFile.getCustomers();
     public userpensan(){
-        this.psnlist = new ArrayList<>();
+        psnlist = new ArrayList<>();
         loadfile();
         getList();
     }
@@ -89,7 +92,7 @@ public class userpensan implements interfacePesan{
     public Pesan getpsn(int idcus){
         psnlist = getList();
         for(Pesan psnl : psnlist){
-            if(psnl.getIdRumah() == idcus){
+            if(psnl.getIdcus() == idcus){
                 return psnl;
             }
         }
@@ -100,21 +103,25 @@ public class userpensan implements interfacePesan{
     public void lihatpesancustomer(int idcus,String username,ArrayList<AccCustomer> cstr,int index) throws IOException {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        System.out.println("Liat Pesan");
-        AccCustomer customer = cstr.get(index);
         Pesan listpns = getpsn(idcus);
-        int id = listpns.getIdRumah();
-        Rumah rmh = cr.getrmh(id);
-        System.out.println("--------------");
-        System.out.println("1. id pesan : " +listpns.getIdpesan());
-        System.out.println("2. Nama Pemesan : " + customer.getNama());
-        System.out.println("3. Alamat : "+customer.getAlamat());
-        System.out.println("4. Tgl pesan : "+ listpns.getTglPesan() );
-        System.out.println("5. Tipe Rumah : "+ rmh.getTipeRumah());
-        System.out.println("6. Status Rumah : "+rmh.getStatusRumah());
-        System.out.println("7. Status Pembayaran : "+listpns.getStatusPbyrn());
-        System.out.println("8. Status Pesan : "+listpns.getStatuspsn());
-        System.out.println("-----------------");
+        if(listpns == null){
+            System.out.println("Anda Belum Memesan Apapun");
+        }else{
+            System.out.println("Liat Pesan");
+            int id = listpns.getIdRumah();
+            AccCustomer customer = cstr.get(index);
+            Rumah rmh = cr.getidrmh(id);
+            System.out.println("--------------");
+            System.out.println("1. id pesan : " +listpns.getIdpesan());
+            System.out.println("2. Nama Pemesan : " + customer.getNama());
+            System.out.println("3. Alamat : "+customer.getAlamat());
+            System.out.println("4. Tgl pesan : "+ listpns.getTglPesan() );
+            System.out.println("5. Tipe Rumah : "+ rmh.getTipeRumah());
+            System.out.println("6. Status Rumah : "+rmh.getStatusRumah());
+            System.out.println("7. Status Pembayaran : "+listpns.getStatusPbyrn());
+            System.out.println("8. Status Pesan : "+listpns.getStatuspsn());
+            System.out.println("-----------------");
+        }
     }
     @Override
     public void hpspesanuser(int idcus) throws IOException {
@@ -150,21 +157,38 @@ public class userpensan implements interfacePesan{
             }
         }
     }
+    public boolean checkpesan(int idcus){
+        psnlist = getList();
+        for(Pesan chkpsn : psnlist){
+            if(chkpsn.getIdcus() == idcus){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
-    public void tambahpesan(String username,int idcus,int cari){
-        
-        if(crud.getRumah(cari) == null ){
-            System.out.println("Nomor rumah yg kamu cari ngak ada");
+    public void tambahpesan(String username,int idcus) throws IOException{
+        if(checkpesan(idcus) == true){
+            System.out.println("Anda Hanya bisa memesan Sekali!!!");
         }else{
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            int idpesan = psnlist.size() + 1;
-            int idRumah = cari;
-            String StatusPesanan = "KonfirmasiPesan";
-            String Pembayaran = "Belum Bayar";
-            Date date = new Date();
-            String Tglpesan = format.format(date); 
-            Pesan psn = new Pesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
-            psn.SaveFilepesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
+            System.out.print("Nomor Rumah Yang ingin dipesan : ");
+            int cari = Integer.parseInt(br.readLine());
+            Rumah rmh = cr.getnormh(cari);
+            if(crud.getRumah(cari) == null ){
+                System.out.println("Nomor rumah yg kamu cari ngak ada");
+            }else if(rmh.getDipesan() == true){
+                System.out.println("Rumah Ini sudah dipesan!!!");
+            }else{
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                int idpesan = psnlist.size() + 1;
+                int idRumah = rmh.getIdRumah();
+                String StatusPesanan = "KonfirmasiPesan";
+                String Pembayaran = "Belum Bayar";
+                Date date = new Date();
+                String Tglpesan = format.format(date); 
+                Pesan psn = new Pesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
+                psn.SaveFilepesan(idpesan, idRumah, idcus, StatusPesanan, Pembayaran,Tglpesan);
+            }
         }
     }
     public void lihatdatadiri(String Username,ArrayList<AccCustomer> cstr,int index) throws IOException {
@@ -191,7 +215,7 @@ public class userpensan implements interfacePesan{
                 int idcus = pslist.getIdcus();
                 int idRumah = pslist.getIdRumah();
                 System.out.println("Status Pesanan : "+ pslist.getStatuspsn());
-                System.out.print("Ubah  status Pesanan ? [ya/tidak]: ");
+                System.out.print("Ubah status Pesanan ? [ya/tidak]: ");
                 String pilih = br.readLine();
                 String konfirmasipesan = pslist.getStatuspsn();
                 if(pilih.equals("ya")){

@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 import java.io.IOException;
 public class crud implements InterfaceRumah {
     static InputStreamReader isr = new InputStreamReader(System.in);
@@ -15,7 +14,7 @@ public class crud implements InterfaceRumah {
     private static ArrayList<Rumah> rumahs;
     
     public crud(){
-        this.rumahs = new ArrayList<>();
+        rumahs = new ArrayList<>();
         loadfile();
         getList();
     }
@@ -39,10 +38,36 @@ public class crud implements InterfaceRumah {
         String StatusRumah = br.readLine();
         System.out.println("Masukkan Tipe Rumah [Standar/Premium]: ");
         String TipeRumah = br.readLine();
-        Rumah rh = new Rumah(idRumah, Norumah, Alamat, StatusRumah, TipeRumah);
-        rh.SaveFileRumah(idRumah, Norumah, Alamat, StatusRumah, TipeRumah);
+        Boolean dipesan = false;
+        Rumah rh = new Rumah(idRumah, Norumah, Alamat, StatusRumah, TipeRumah,dipesan);
+        rh.SaveFileRumah(idRumah, Norumah, Alamat, StatusRumah, TipeRumah,dipesan);
     }
     @Override
+    public void updstatuspesan(int nomorRumah){
+        for(int i = 0; i < rumahs.size(); i++){
+            Rumah rmhs = rumahs.get(i);
+            if(rmhs.getNomorRumah() == nomorRumah){
+                int idrumah = rmhs.getIdRumah();
+                int Norumah = rmhs.getNomorRumah();
+                String Alamat =  rmhs.getAlamat();
+                String StatusRumah = rmhs.getStatusRumah();
+                String TipeRumah = rmhs.getStatusRumah();
+                Boolean dipesan = true;
+                rmhs = new Rumah(idrumah, Norumah, Alamat, StatusRumah, TipeRumah,dipesan);
+                rumahs.set(i, rmhs);                
+        }
+        }
+        try{
+            FileWriter writer = new FileWriter("data/Rumah.txt", false);
+            BufferedWriter bw = new BufferedWriter(writer);
+            for(Rumah rmhs : rumahs){
+            bw.write(rmhs.getIdRumah() +"," + rmhs.getNomorRumah() + ","+ rmhs.getAlamat() + ","+rmhs.getStatusRumah() +","+ rmhs.getStatusRumah() + ","+rmhs.getDipesan()+"\n");
+            bw.close();
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
     public void update() throws IOException {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -64,7 +89,8 @@ public class crud implements InterfaceRumah {
                     String StatusRumah = br.readLine();
                     System.out.println("Masukkan Tipe Rumah [Standar/Premium]: ");
                     String TipeRumah = br.readLine();
-                    rmhs = new Rumah(idrumah, Norumah, Alamat, StatusRumah, TipeRumah);
+                    Boolean dipesan = rmhs.getDipesan();
+                    rmhs = new Rumah(idrumah, Norumah, Alamat, StatusRumah, TipeRumah,dipesan);
                     rumahs.set(i, rmhs);                
             }
         }
@@ -114,13 +140,14 @@ public class crud implements InterfaceRumah {
             String line = reader.readLine();
             while(line != null){
                 String[] tokens = line.split(",");
-                    if (tokens.length >= 5) {
+                    if (tokens.length == 6) {
                         int idRumah = Integer.parseInt(tokens[0]);
                         int NomorRumah = Integer.parseInt(tokens[1]);
                         String Alamat = tokens[2];
                         String StatusRumah = tokens[3];
                         String tipeRumah = tokens[4];
-                        Rumah rmh = new Rumah(idRumah, NomorRumah,Alamat,StatusRumah,tipeRumah);
+                        Boolean dihuni = Boolean.valueOf(tokens[5]);
+                        Rumah rmh = new Rumah(idRumah, NomorRumah,Alamat,StatusRumah,tipeRumah,dihuni);
                         rumahs.add(rmh);
                     }
                 line = reader.readLine();
@@ -147,6 +174,11 @@ public class crud implements InterfaceRumah {
             System.out.println("Alamat : "+Alamat);
             System.out.println("Status : "+StatusRumah);
             System.out.println("Tipe : "+TipeRumah );
+            if(rmhs.getDipesan() == false){
+                System.out.println("Status pesan : kosong");
+            }else{
+                System.out.println("Status Pesan : Sudah Dipesan");
+            }
             System.out.println("-----");
         }
     }
@@ -164,8 +196,9 @@ public class crud implements InterfaceRumah {
                 String Alamat = tokens[2];
                 String StatusRumah = tokens[3];
                 String tipeRumah = tokens[4];
+                boolean dihuni = Boolean.valueOf(tokens[5]);
                 if(NomorRumah == cari){
-                    rhm = new Rumah(idRumah, NomorRumah, Alamat, StatusRumah, tipeRumah);
+                    rhm = new Rumah(idRumah, NomorRumah, Alamat, StatusRumah, tipeRumah,dihuni);
                     rumahs.add(rhm);
                     break;
                 }
@@ -181,10 +214,19 @@ public class crud implements InterfaceRumah {
             return null;
         }
     }
-    public Rumah getrmh(int idrmh){
+    public Rumah getidrmh(int idrumah){
         rumahs = getList();
         for(Rumah rhm : rumahs){
-            if(rhm.getIdRumah() == idrmh){
+            if(rhm.getIdRumah() == idrumah){
+                return rhm;
+            }
+        }
+        return null;
+    }
+    public Rumah getnormh(int nomorRumah){
+        rumahs = getList();
+        for(Rumah rhm : rumahs){
+            if(rhm.getNomorRumah() == nomorRumah){
                 return rhm;
             }
         }

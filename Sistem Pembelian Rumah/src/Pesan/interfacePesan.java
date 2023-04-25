@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import Account.AccCustomer;
 
 public interface interfacePesan {
-    ArrayList<Pesan> getList();
-    public void tambahpesan(String username,int idcus,int cari) throws IOException;
+    public ArrayList<Pesan> getList();
+    public void tambahpesan(String username,int idcus) throws IOException;
     public void ubahpesan() throws IOException;
     public void lihatseluruhpesan() throws IOException;
     public void lihatpesancustomer(int idcus,String username,ArrayList<AccCustomer> cstr,int index) throws IOException;

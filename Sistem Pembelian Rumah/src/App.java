@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
@@ -25,7 +26,6 @@ public class App {
     Scanner s = new Scanner(System.in);
     s.nextLine();
     }
-    //todo tambahkan pesanan
     public static void Pagerumah() throws IOException{
         while (cont){
             System.out.print("\033[H\033[2J");
@@ -37,21 +37,27 @@ public class App {
             System.out.println("4. delete");
             System.out.println("5. Kembali");
             System.out.print("Menu : ");
+            menu =Integer.parseInt(br.readLine());
             switch(menu){
                 case 1:
                     crud.lihat();
+                    prssEnterKeyToContinue();
                     break;
                 case 2:
                     crud.create();
+                    prssEnterKeyToContinue();
                     break;
                 case 3:
                     crud.update();
+                    prssEnterKeyToContinue();
                     break;
                 case 4:
                     crud.delete();
+                    prssEnterKeyToContinue();
                     break;
                 case 5:
                     cont = false;
+                    showpageAdmin();
                     break;
                 default :
                     System.out.println("Invalid input!!");
@@ -67,8 +73,11 @@ public class App {
             System.out.println("1. lihat Pesanan");
             System.out.println("2. Konfirmasi pesanan");
             System.out.println("3. hapus Pesanan");
+            System.out.println("4. kembali");
             System.out.print("Menu : ");
             menu = Integer.parseInt(br.readLine());
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
             switch (menu) {
                 case 1 :
                     psn.lihatseluruhpesan();
@@ -77,15 +86,23 @@ public class App {
                 case 2 :
                     psn.konfirmasipesan();
                     prssEnterKeyToContinue();
+                    break;
                 case 3 :
                     psn.hpspesanadmin();
                     prssEnterKeyToContinue();
+                    break;
+                case 4:
+                    cont =false;
+                    showpageAdmin();
+                    break;
                 default:
+                    System.out.println("Invalid input");
                     break;
             }
         }
     }
     public static void showpageAdmin() throws IOException{
+        cont = true;
         while (cont){
             System.out.print("\033[H\033[2J");
             System.out.flush();
@@ -94,8 +111,8 @@ public class App {
             System.out.println("2. Manajemen Pesanan");
             System.out.println("3. Log Out");
             System.out.print("Menu : ");
-            int menu = Integer.parseInt(br.readLine());
-            switch(menu){
+            menu = Integer.parseInt(br.readLine());
+            switch (menu){
                 case 1:
                     Pagerumah();
                     prssEnterKeyToContinue();
@@ -105,12 +122,13 @@ public class App {
                     prssEnterKeyToContinue();
                     break;
                 case 3:
-                    System.out.println("Log out Berhasil!!");
+                    cont =false;
+                    System.out.println("Anda berhasil Log out!!");
                     prssEnterKeyToContinue();
-                    cont = false;
                     break;
-            default:
-                break;
+                default:
+                    System.out.println("Invalid Input ");
+                    break;
             }
         }
     }
@@ -120,39 +138,46 @@ public class App {
                 AccCustomer customer = cstr.get(i);
                 int index = cstr.indexOf(customer);
                 int idcus = customer.getIdcustomer();
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-                System.out.println("Selamat Datang "+ usrnm);
-                System.out.println("1. Lihat data Rumah");
-                System.out.println("2. pesan Rumah");
-                System.out.println("3. Lihat Pesan");
-                System.out.println("4. Lihat Data Diri");
-                System.out.println("5. Log out");
-                int menu = Integer.parseInt(br.readLine());
-                switch(menu){
-                    case 1:
-                        crud.lihat();
-                        prssEnterKeyToContinue();
-                        break;
-                    case 2:
-                        System.out.println("Nomor Rumah Yang ingin dipesan : ");
-                        int cari = Integer.parseInt(br.readLine());
-                        psn.tambahpesan(usrnm, idcus,cari);
-                        prssEnterKeyToContinue();
-                        break;
-                    case 3:
-                        psn.lihatpesancustomer(idcus, usrnm, cstr,index);
-                        prssEnterKeyToContinue();
-                        break;
-                    case 4:
-                        psn.lihatdatadiri(usrnm, cstr,index);
-                        break;
-                    case 5:
-                        cont =false;
-                        break;
-                    default:
-                        System.out.println("Invalid Input");
-
+                while(cont){
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+                    System.out.println("Selamat Datang "+ usrnm);
+                    System.out.println("1. Lihat data Rumah");
+                    System.out.println("2. pesan Rumah");
+                    System.out.println("3. Lihat Pesan");
+                    System.out.println("4. Lihat Data Diri");
+                    System.out.println("5. Log out");
+                    System.out.print("Menu : ");
+                    int menu = Integer.parseInt(br.readLine());
+                    switch(menu){
+                        case 1:
+                            crud.lihat();
+                            prssEnterKeyToContinue();
+                            break;
+                        case 2:
+                            psn.tambahpesan(usrnm, idcus);
+                            prssEnterKeyToContinue();
+                            break;
+                        case 3:
+                            psn.lihatpesancustomer(idcus, usrnm, cstr,index);
+                            prssEnterKeyToContinue();
+                            break;
+                        case 4:
+                            psn.lihatdatadiri(usrnm, cstr,index);
+                            prssEnterKeyToContinue();
+                            break;
+                        case 5:
+                            cont =false;
+                            System.out.println("Anda berhasil Log out!!");
+                            cstr.clear();
+                            prssEnterKeyToContinue();
+                            System.out.print("\033[H\033[2J");
+                            System.out.flush();
+                            break;
+                        default:
+                            System.out.println("Invalid Input");
+                            break;
+                    }
                 }
             }
         }else{
@@ -173,6 +198,7 @@ public class App {
             if (save.loginAdmin(username, Password) == true) {
                 System.out.println("Login successful!");
                 prssEnterKeyToContinue();
+                cont =true;
                 showpageAdmin();
             } else {
                 System.out.println("Password Dan Username Salah");
@@ -183,6 +209,7 @@ public class App {
             if (SaveFile.loginCustomer(username, Password) == true) {
                 System.out.println("Login successful!");
                 prssEnterKeyToContinue();
+                cont = true;
                 showpageuser(username);
             } else {
                 System.out.println("Password Dan Username Salah");
@@ -191,7 +218,7 @@ public class App {
         }
     }
     public static void register() throws IOException{
-        int id = SaveFile.count() + 1;
+        int id = SaveFile.count();
         System.out.print("Masukkan username : ");
         String username = br.readLine();
         System.out.print("Masukkan Password : ");
@@ -207,13 +234,14 @@ public class App {
         System.out.print("Masukkan Alamat : ");
         String Alamat = br.readLine();
         save.registerCustomer(username, Password, id, umur, Nama, JenisKelamin, Alamat, Email);
+
     }
     
     public static void main(String[] args) throws IOException {
        
         while(true){
-        // System.out.print("\033[H\033[2J");
-        // System.out.flush();
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         System.out.println("Selamat Datang di Aplikasi Pemesanan Rumah");
         System.out.println("1. Login");
         System.out.println("2. Register");

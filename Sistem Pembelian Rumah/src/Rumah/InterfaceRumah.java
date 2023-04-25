@@ -9,5 +9,5 @@ public interface InterfaceRumah {
     public void update() throws IOException;
     public void delete() throws IOException;
     public void lihat() throws IOException;
-
+    public void updstatuspesan(int NomorRumah);
 }
