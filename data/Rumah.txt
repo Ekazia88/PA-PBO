@@ -1,2 +1,6 @@
-3,23,asf,sadf,sadf,true
-2,25,Jln.beri,Belum Selesai,Standar,false
+3,24,Jln.Buaya,Kosong,Premium,false
+2,29,Jln.satu,Belum Selesai,Premium,false
+4,28,Jln.dia,Selesai,Standar,false
+36,31,Kasur,Kosong,Premium,false
+39,34,Jln.Rumah,Kosong,Standar,true
+40,35,Jln.Abadi,Selesai,Premium,false

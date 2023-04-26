@@ -3,3 +3,5 @@ AccCustomer,Abdullah,abd123
 AccCustomer,abd12,abd24
 AccCustomer,Ari2,ariri123
 AccCustomer,Leon,leon123
+AccCustomer,Arif2,Arif123
+AccCustomer,Gusti20,Dimas123

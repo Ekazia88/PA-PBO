@@ -9,7 +9,7 @@ public class Rumah{
     private String Alamat;
     private String StatusRumah;
     private String tipeRumah; 
-    private Boolean dipesan = false;
+    private Boolean dipesan;
     public Rumah(int idRumah,int NomorRumah,String Alamat,String StatusRumah, String tipeRumah,Boolean dipesan){
         this.idRumah = idRumah;
         this.NomorRumah = NomorRumah;

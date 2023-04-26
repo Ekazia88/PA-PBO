@@ -6,12 +6,9 @@ public abstract class Akun implements interfaceAkun {
         this.username = username;
         this.password = password;
     }
-    @Override
     public String getUsername() {
-        // TODO Auto-generated method stub
         return username;
     }
-    @Override
     public String getPassword() {
         return password;
     }
@@ -25,5 +22,4 @@ public abstract class Akun implements interfaceAkun {
         return this.username.equals(user) && this.password.equals(pass);
     }
     public abstract void registerusers(String username, String password);
-
 }

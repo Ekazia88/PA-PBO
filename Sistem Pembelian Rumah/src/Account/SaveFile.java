@@ -39,12 +39,6 @@ public class SaveFile {
     public static void setCustomers(ArrayList<AccCustomer> customers) {
         SaveFile.customers = customers;
     }
-    public void registerAdmin(String username, String password) {
-        accAdmin admin = new accAdmin("Admin", "admin123");
-        admin.registerusers(username, password);
-        admins.add(admin);
-    }
-
     public void registerCustomer(String username, String password,int idcustomer,int umur, String nama,String Jk,String Alamat,String email) {
         AccCustomer customer = new AccCustomer(username, password,idcustomer,umur,nama,Jk,Alamat,email);
         customer.register(username, password,idcustomer,umur,nama,Jk,Alamat,email);

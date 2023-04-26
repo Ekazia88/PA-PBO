@@ -5,14 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 //TODO buat class pesan
-public class Pesan  {
+public class Pesan{
     private final Integer Idpesan;
     private Integer IdRumah;
     private Integer Idcus;
     private String Statuspsn;
     private String StatusPbyrn;
     private String TglPesan;
-
     public Pesan(Integer Idpesan, Integer IdRumah, Integer Idcus,String Statuspsn,String StatusPbyrn,String TglPesan){
         this.Idpesan = Idpesan;
         this.IdRumah = IdRumah;
