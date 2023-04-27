@@ -7,6 +7,9 @@ public class accAdmin extends Akun {
     public accAdmin(String username, String password) {
         super(username, password);
     }
+    public boolean login(String user, String pass) {
+        return this.getUsername().equals(user) && this.getPassword().equals(pass);
+    }
     @Override
     public void registerusers(String username, String password){
         try{

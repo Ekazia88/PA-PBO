@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import Account.*;
 
 import Rumah.*;
-public class userpensan{
+public class userpensan implements interfacePesan{
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader br = new BufferedReader(isr);
     private static crud cr = new crud();

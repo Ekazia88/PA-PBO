@@ -52,6 +52,9 @@ public class AccCustomer extends Akun {
     public void setEmail(String email) {
         Email = email;
     }
+    public boolean login(String user, String pass) {
+        return this.getUsername().equals(user) && this.getPassword().equals(pass);
+    }
     public void register(String username, String password,int idcustomer,int Umur, String Nama, String JenisKelamin,String Alamat,String Email) {
         SaveFile.saveCustomersToFile(new AccCustomer(username, password, idcustomer, Umur, Nama, JenisKelamin, Alamat, Email));
     }

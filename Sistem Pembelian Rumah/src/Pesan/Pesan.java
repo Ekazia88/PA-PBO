@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 //TODO buat class pesan
-public class Pesan{
+public class Pesan {
     private final Integer Idpesan;
     private Integer IdRumah;
     private Integer Idcus;
